@@ -1,21 +1,16 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Gopeed
 
-My Chrome Extension
+Gopeed 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器
 
-## Features
+![图 1](images/gopeed.png)  
 
-- Feature 1
-- Feature 2
+![图 2](images/download.png)  
 
-## Install
+## 安装
 
-[**Chrome** extension]()
+由于 Chrome 商店开发者注册要 5 美刀, 本人不想出这个钱.
 
-## Contribution
+ 所以目前要使用开发者模式安装解压缩的插件.
 
-Suggestions and pull requests are welcomed!.
-
----
-
-This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
+![图 0](images/sticker.png)
 
