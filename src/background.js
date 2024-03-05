@@ -18,6 +18,9 @@ chrome.downloads.onCreated.addListener(async function (downloadItem) {
       req: {
         url: downloadItem.finalUrl,
       },
+      opt: {
+        selectFiles: [0]
+      }
     });
   } catch (error) {
     chrome.notifications.create({
