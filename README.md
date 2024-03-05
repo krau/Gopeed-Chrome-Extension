@@ -1,6 +1,6 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Gopeed
 
-Gopeed 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器
+[Gopeed](https://gopeed.com/zh-CN) 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器
 
 ![图 1](images/gopeed.png)  
 
@@ -13,4 +13,3 @@ Gopeed 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器
  所以目前要使用开发者模式安装解压缩的插件.
 
 ![图 0](images/sticker.png)
-
