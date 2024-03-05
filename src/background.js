@@ -1,21 +1,30 @@
 'use strict';
+import { Client } from "../node_modules/@gopeed/rest";
+let cilent = new Client();
+chrome.storage.local.get(['host', 'token'], function (data) {
+  const host = data.host;
+  const token = data.token;
+  cilent = new Client({
+    host: host,
+    token: token
+  });
+});
 
-// With background scripts you can communicate with popup
-// and contentScript files.
-// For more information on background script,
-// See https://developer.chrome.com/extensions/background_pages
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'GREETINGS') {
-    const message = `Hi ${
-      sender.tab ? 'Con' : 'Pop'
-    }, my name is Bac. I am from Background. It's great to hear from you.`;
-
-    // Log message coming from the `request` parameter
-    console.log(request.payload.message);
-    // Send a response message
-    sendResponse({
-      message,
+chrome.downloads.onCreated.addListener(async function (downloadItem) {
+  console.log('onCreated', downloadItem.finalUrl);
+  chrome.downloads.cancel(downloadItem.id);
+  try {
+    await cilent.createTask({
+      req: {
+        url: downloadItem.finalUrl,
+      },
+    });
+  } catch (error) {
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: "icons/icon_48.png",
+      title: 'Error when create task',
+      message: 'Error message: ' + error.message,
     });
   }
-});
+})

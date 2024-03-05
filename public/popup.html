@@ -1,32 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>My Chrome Extension</title>
-    <link rel="stylesheet" href="popup.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gopeed</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 20px;
+      min-width: 300px;
+    }
+
+    .container {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #111;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 12px);
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      background-color: #fff;
+    }
+
+    button {
+      background-color: #39c5bb;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #2aae9e;
+    }
+
+    .success-message {
+      display: none;
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      opacity: 1;
+      transition: opacity 0.5s ease-out;
+    }
+  </style>
 </head>
+
 <body>
-  <div class="app">
-    <p class="counter-label">Counter</p>
-    <div id="counter" class="counter"></div>
-    <div class="button-container">
-      <button id="decrementBtn" class="button">-</button>
-      <button id="incrementBtn" class="button">+</button>
+  <form>
+    <h2>Gopeed Settings</h2>
+    <div>
+      <label for="host">Host:</label>
+      <input type="text" id="host" name="host">
     </div>
-
-    <hr class="divider" />
-
-    <p class="title">Chrome Extension is Ready!</p>
-    <p class="subtitle">Start by updating <code>popup.html</code></p>
-  </div>
-
-  <script src="popup.js"></script>
-
-  <!--
-    This HTML file opens when you click on icon from the toolbar.
-
-    To begin the development, run `npm run watch`.
-    To create a production bundle, use `npm run build`.
-  -->
+    <div>
+      <label for="token">Token:</label>
+      <input type="text" id="token" name="token">
+    </div>
+    <button type="button" id="saveButton">Save</button>
+    <div class="success-message" id="successMessage">Settings saved successfully!</div>
+  </form>
 </body>
+
+<script src="popup.js"></script>
+
 </html>
