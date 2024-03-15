@@ -1,17 +1,16 @@
 'use strict';
+
 import { Client } from "../node_modules/@gopeed/rest";
 
-chrome.storage.local.get(['host', 'token'], function (data) {
+chrome.storage.local.get(['host', 'token', 'enableNotification'], function (data) {
   const host = data.host;
   const token = data.token;
-
   const client = new Client({
     host: host,
     token: token
   });
 
   chrome.downloads.onCreated.addListener(async function (downloadItem) {
-    console.log('onCreated', downloadItem.finalUrl);
     chrome.downloads.cancel(downloadItem.id);
     try {
       await client.createTask({
@@ -21,6 +20,12 @@ chrome.storage.local.get(['host', 'token'], function (data) {
         opt: {
           selectFiles: [0]
         }
+      });
+      chrome.notifications.create({
+        type: 'basic',
+        iconUrl: "icons/icon_48.png",
+        title: 'Create task success',
+        message: 'Size: ' + (downloadItem.fileSize / (1024 * 1024)).toFixed(2) + 'MB',
       });
     } catch (error) {
       chrome.notifications.create({
