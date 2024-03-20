@@ -10,25 +10,32 @@ chrome.storage.local.get(['host', 'token', 'enableNotification'], function (data
     token: token
   });
 
-  chrome.downloads.onCreated.addListener(async function (downloadItem) {
-    chrome.downloads.cancel(downloadItem.id);
+  chrome.downloads.onDeterminingFilename.addListener(async function (item) {
+    await chrome.downloads.cancel(item.id)
+    if (item.state === "complete") {
+      await chrome.downloads.removeFile(item.id);
+    }
+
+    const downloadUrl = item.finalUrl;
+
     try {
       await client.createTask({
         req: {
-          url: downloadItem.finalUrl,
+          url: downloadUrl,
         },
         opt: {
+          name: item.filename,
           selectFiles: [0]
         }
       });
-      chrome.notifications.create({
+      await chrome.notifications.create({
         type: 'basic',
         iconUrl: "icons/icon_48.png",
         title: 'Create task success',
-        message: 'Size: ' + (downloadItem.fileSize / (1024 * 1024)).toFixed(2) + 'MB',
+        message: 'Size: ' + (item.fileSize / (1024 * 1024)).toFixed(2) + 'MB',
       });
     } catch (error) {
-      chrome.notifications.create({
+      await chrome.notifications.create({
         type: 'basic',
         iconUrl: "icons/icon_48.png",
         title: 'Error when create task',
