@@ -1,6 +1,8 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Gopeed
 
-[Gopeed](https://gopeed.com/zh-CN) 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器
+[Gopeed](https://gopeed.com/zh-CN) 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器.
+
+[→ Firefox 版](https://github.com/krau/Gopeed-Firefox-Extension) 在这里
 
 ![图 1](images/gopeed.png)  
 
