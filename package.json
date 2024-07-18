@@ -1,7 +1,7 @@
 {
   "name": "gopeed",
-  "version": "0.1.5",
-  "description": "A Chrome Extension for GoPeed",
+  "version": "0.2.0",
+  "description": "A Chrome Extension for Gopeed",
   "private": true,
   "scripts": {
     "watch": "node ./node_modules/webpack/bin/webpack.js --mode=development --watch --config config/webpack.config.js",
@@ -19,6 +19,6 @@
     "webpack-merge": "^5.10.0"
   },
   "dependencies": {
-    "@gopeed/rest": "^1.3.8"
+    "@gopeed/rest": "^1.4.0"
   }
 }

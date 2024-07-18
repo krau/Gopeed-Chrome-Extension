@@ -1,100 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gopeed</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        width: 300px;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gopeed</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 20px;
-      min-width: 300px;
-    }
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+      }
 
-    .container {
-      max-width: 300px;
-      margin: 0 auto;
-    }
+      form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
 
-    h2 {
-      text-align: center;
-      color: #333;
-    }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #666;
+      }
 
-    form {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
+      input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: border-color 0.3s ease;
+      }
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #111;
-    }
+      input[type="text"]:focus {
+        border-color: #4caf50;
+        outline: none;
+      }
 
-    input[type="text"] {
-      width: calc(100% - 12px);
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      background-color: #fff;
-    }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
 
-    button {
-      background-color: #39c5bb;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-    }
+      button:hover {
+        background-color: #45a049;
+      }
 
-    button:hover {
-      background-color: #2aae9e;
-    }
+      .success-message {
+        display: none;
+        color: #4caf50;
+        text-align: center;
+        margin-top: 10px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
 
-    .success-message {
-      display: none;
-      background-color: #4caf50;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 4px;
-      opacity: 1;
-      transition: opacity 0.5s ease-out;
-    }
-  </style>
-</head>
+      .checkbox-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
 
-<body>
-  <form>
-    <h2>Gopeed Settings</h2>
-    <div>
-      <label for="host">Host:</label>
-      <input type="text" id="host" name="host" />
-    </div>
-    <div>
-      <label for="token">Token:</label>
-      <input type="text" id="token" name="token" />
-    </div>
-    <div>
-      <input type="checkbox" id="enableNotification" name="enableNotification">Enable Notification
-    </div>
-    </div>
-    <button type="button" id="saveButton">Save</button>
-    <div class="success-message" id="successMessage">
-      Settings saved successfully!
-    </div>
-  </form>
-</body>
+      .modern-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
 
-<script src="popup.js"></script>
+      .modern-checkbox input[type="checkbox"] {
+        display: none;
+      }
 
+      .modern-checkbox label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .modern-checkbox label:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #4caf50;
+        background-color: #fff;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+      }
+
+      .modern-checkbox input[type="checkbox"]:checked + label:before {
+        background-color: #4caf50;
+      }
+
+      .modern-checkbox label:after {
+        content: "\2714";
+        position: absolute;
+        top: 0;
+        left: 5px;
+        font-size: 14px;
+        color: #fff;
+        transition: all 0.3s ease;
+        opacity: 0;
+      }
+
+      .modern-checkbox input[type="checkbox"]:checked + label:after {
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form>
+      <h2>Gopeed Settings</h2>
+      <div>
+        <label for="host">Host:</label>
+        <input type="text" id="host" name="host" />
+        <label for="token">Token:</label>
+        <input type="text" id="token" name="token" />
+        <div class="checkbox-group">
+          <div class="modern-checkbox">
+            <input type="checkbox" id="enabled" name="enabled" />
+            <label for="enabled">接管下载</label>
+          </div>
+          <div class="modern-checkbox">
+            <input
+              type="checkbox"
+              id="enableNotification"
+              name="enableNotification"
+            />
+            <label for="enableNotification">启用通知</label>
+          </div>
+        </div>
+      </div>
+      <button type="button" id="saveButton">保存</button>
+      <div class="success-message" id="successMessage">设置已保存</div>
+    </form>
+    <script src="popup.js"></script>
+  </body>
 </html>

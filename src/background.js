@@ -5,7 +5,8 @@ import { Client } from "../node_modules/@gopeed/rest";
 const Settings = {
   host: 'http://localhost:39666',
   token: 'qwqowo',
-  enableNotification: true
+  enableNotification: true,
+  enabled: true,
 }
 
 let client;
@@ -28,6 +29,9 @@ chrome.storage.onChanged.addListener((changes) => {
   if (changes.enableNotification) {
     Settings.enableNotification = changes.enableNotification.newValue;
   }
+  if (changes.enabled) {
+    Settings.enabled = changes.enabled.newValue;
+  }
   client = new Client({
     host: Settings.host,
     token: Settings.token
@@ -36,6 +40,9 @@ chrome.storage.onChanged.addListener((changes) => {
 
 chrome.downloads.onDeterminingFilename.addListener(async function (item) {
   await initStorage;
+  if (!Settings.enabled) {
+    return;
+  }
   await chrome.downloads.cancel(item.id);
   try {
     const downloadUrl = item.finalUrl;
