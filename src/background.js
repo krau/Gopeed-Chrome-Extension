@@ -19,6 +19,24 @@ const initStorage = chrome.storage.local.get().then((items) => {
   });
 });
 
+const sendSuccessNotification = async (message) => {
+  await chrome.notifications.create({
+    type: 'basic',
+    iconUrl: "icons/icon_48.png",
+    title: '已创建下载任务',
+    message: message,
+  });
+}
+
+const sendErrorNotification = async (message) => {
+  await chrome.notifications.create({
+    type: 'basic',
+    iconUrl: "icons/icon_48.png",
+    title: '创建下载任务失败',
+    message: message,
+  });
+}
+
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.host) {
     Settings.host = changes.host.newValue;
@@ -49,27 +67,64 @@ chrome.downloads.onDeterminingFilename.addListener(async function (item) {
     await client.createTask({
       req: {
         url: downloadUrl,
+        extra: {
+          header: {
+            "Referer": item.referrer || item.url || downloadUrl,
+          }
+        },
       },
       opt: {
         name: item.filename,
-        selectFiles: [0]
       }
     });
     if (Settings.enableNotification) {
-      await chrome.notifications.create({
-        type: 'basic',
-        iconUrl: "icons/icon_48.png",
-        title: 'Create task success',
-        message: 'Size: ' + (item.fileSize / (1024 * 1024)).toFixed(2) + 'MB',
-      });
+      await sendSuccessNotification('文件大小: ' + (item.fileSize / (1024 * 1024)).toFixed(2) + 'MB');
     }
   } catch (error) {
-    await chrome.notifications.create({
-      type: 'basic',
-      iconUrl: "icons/icon_48.png",
-      title: 'Error when create task',
-      message: 'Error message: ' + error.message,
-    });
+    await sendErrorNotification('错误信息: ' + error.message);
   }
 });
 
+chrome.contextMenus.create({
+  id: 'createTask',
+  title: '使用Gopeed下载',
+  contexts: ['link', 'image', 'video', 'audio'],
+});
+
+chrome.contextMenus.onClicked.addListener(async function (info, tab) {
+  await initStorage;
+  console.log(info);
+  try {
+    let downloadUrl = info.linkUrl || info.srcUrl || info.frameUrl;
+    if (info.mediaType) {
+      downloadUrl = info.frameUrl || downloadUrl;
+    }
+    if (!downloadUrl) {
+      chrome.notifications.create({
+        type: 'basic',
+        iconUrl: "icons/icon_48.png",
+        title: '创建下载任务失败',
+        message: '无法获取下载链接',
+      });
+    }
+    const resolveResult = await client.resolve({
+      url: downloadUrl,
+      extra: {
+        header: {
+          "Referer": tab.url || downloadUrl,
+        }
+      }
+    })
+    await client.createTask({
+      rid: resolveResult.id,
+      opt: {
+        name: resolveResult.res.files[0].name
+      }
+    })
+    if (Settings.enableNotification) {
+      await sendSuccessNotification('文件大小: ' + (resolveResult.res.files[0].size / (1024 * 1024)).toFixed(2) + 'MB');
+    }
+  } catch (error) {
+    await sendErrorNotification('错误信息: ' + error.message);
+  }
+});

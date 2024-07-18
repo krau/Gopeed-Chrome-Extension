@@ -19,6 +19,7 @@
   "permissions": [
     "downloads",
     "storage",
-    "notifications"
+    "notifications",
+    "contextMenus"
   ]
 }
