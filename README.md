@@ -1,16 +1,31 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Gopeed
+<div align="center">
 
-[Gopeed](https://gopeed.com/zh-CN) 的 Chrome 系浏览器插件, 将下载行为传递到 Gopeed 下载器.
+# <img src="public/icons/icon_48.png" width="45" align="center"> Gopeed Chrome Extension
 
-[→ Firefox 版](https://github.com/krau/Gopeed-Firefox-Extension) 在这里
+将浏览器下载自动传递到 [Gopeed](https://gopeed.com/zh-CN) 下载器. 支持右键菜单使用 [Gopeed](https://gopeed.com/zh-CN) 下载.
 
-![图 1](images/gopeed.png)  
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![GitHub stars](https://img.shields.io/github/stars/krau/Gopeed-Chrome-Extension?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/krau/Gopeed-Chrome-Extension?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/krau/Gopeed-Chrome-Extension?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/krau/Gopeed-Chrome-Extension?style=for-the-badge)
 
-![图 2](images/download.png)  
+</div>
 
-## 安装与使用
+## 📱 预览
 
-由于 Chrome 商店开发者注册要 5 美刀, 本人不想出这个钱.
+<br>
+
+<div align="center">
+    <img src="images/gopeed.png" alt="popup" style="height: 600px;width: auto;">
+   <img src="images/contextMenu.png" alt="context menu" style="height:600px;width:auto;">
+</div>
+
+<br>
+
+## ❓ 安装与使用
+
+由于 Chrome 商店开发者注册要 5 美刀, 本人不想花这个钱.
 
 所以目前要使用开发者模式安装解压缩的插件.
 
@@ -22,4 +37,9 @@
 
 注意 Host 要带上协议头, 如 `http://` 或 `https://`.
 
-![图 0](images/sticker.png)
+![sticker](images/sticker.png)
+
+
+## 🦊 Firefox 版本
+
+https://github.com/krau/Gopeed-Firefox-Extension
