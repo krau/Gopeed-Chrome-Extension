@@ -10,12 +10,10 @@
         width: 300px;
         padding: 20px;
         background-color: #f5f5f5;
-      }
-
-      h2 {
-        color: #333;
-        margin-bottom: 20px;
-        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
       }
 
       form {
@@ -23,6 +21,14 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 280px;
+      }
+
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
       }
 
       label {
@@ -38,6 +44,7 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         transition: border-color 0.3s ease;
+        box-sizing: border-box;
       }
 
       input[type="text"]:focus {
@@ -53,6 +60,7 @@
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        width: 100%;
       }
 
       button:hover {
@@ -70,10 +78,11 @@
 
       .checkbox-group {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         margin-bottom: 15px;
       }
 
+      /* 现代化的复选框样式 */
       .modern-checkbox {
         display: flex;
         align-items: center;
@@ -137,7 +146,7 @@
         <div class="checkbox-group">
           <div class="modern-checkbox">
             <input type="checkbox" id="enabled" name="enabled" />
-            <label for="enabled">接管下载</label>
+            <label for="enabled">自动接管</label>
           </div>
           <div class="modern-checkbox">
             <input
