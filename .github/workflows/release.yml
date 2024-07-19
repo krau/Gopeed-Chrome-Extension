@@ -34,8 +34,6 @@ jobs:
         with:
           args: zip -r Gopeed-Chrome-Extension.zip build
 
-
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
