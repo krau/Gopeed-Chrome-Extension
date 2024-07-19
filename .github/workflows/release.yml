@@ -27,9 +27,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
-          apt-get update && apt-get install -y zip
-          zip -r Gopeed-Chrome-Extension.zip build
+        run: npm run build && apt-get update && apt-get install -y zip && zip -r Gopeed-Chrome-Extension.zip build
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
