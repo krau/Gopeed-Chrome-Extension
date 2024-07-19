@@ -89,7 +89,7 @@ chrome.downloads.onDeterminingFilename.addListener(async function (item) {
 });
 
 chrome.contextMenus.create({
-  id: 'createTask',
+  id: Math.random().toString(),
   title: '使用Gopeed下载',
   contexts: ['link', 'image', 'video', 'audio'],
 });
