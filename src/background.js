@@ -19,8 +19,8 @@ const initStorage = chrome.storage.local.get().then((items) => {
   });
 });
 
-const sendSuccessNotification = async (message) => {
-  await chrome.notifications.create({
+const sendSuccessNotification = (message) => {
+  chrome.notifications.create({
     type: 'basic',
     iconUrl: "icons/icon_48.png",
     title: '已创建下载任务',
@@ -28,14 +28,15 @@ const sendSuccessNotification = async (message) => {
   });
 }
 
-const sendErrorNotification = async (message) => {
-  await chrome.notifications.create({
+const sendErrorNotification = (message) => {
+  chrome.notifications.create({
     type: 'basic',
     iconUrl: "icons/icon_48.png",
     title: '创建下载任务失败',
     message: message,
   });
 }
+
 
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.host) {
@@ -81,22 +82,22 @@ chrome.downloads.onDeterminingFilename.addListener(async function (item) {
       }
     });
     if (Settings.enableNotification) {
-      await sendSuccessNotification('文件大小: ' + (item.fileSize / (1024 * 1024)).toFixed(2) + 'MB');
+      sendSuccessNotification('文件大小: ' + (item.fileSize / (1024 * 1024)).toFixed(2) + 'MB');
     }
   } catch (error) {
-    await sendErrorNotification('错误信息: ' + error.message);
+    sendErrorNotification('错误信息: ' + error.message);
   }
 });
 
+await chrome.contextMenus.removeAll();
 chrome.contextMenus.create({
-  id: Math.random().toString(),
+  id: "createTask",
   title: '使用Gopeed下载',
   contexts: ['link', 'image', 'video', 'audio'],
 });
 
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
   await initStorage;
-  console.log(info);
   try {
     let downloadUrl = info.linkUrl || info.srcUrl || info.frameUrl;
     if (info.mediaType) {
@@ -131,9 +132,9 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
       text: '',
     });
     if (Settings.enableNotification) {
-      await sendSuccessNotification('文件大小: ' + (resolveResult.res.files[0].size / (1024 * 1024)).toFixed(2) + 'MB');
+      sendSuccessNotification('文件大小: ' + (resolveResult.res.files[0].size / (1024 * 1024)).toFixed(2) + 'MB');
     }
   } catch (error) {
-    await sendErrorNotification('错误信息: ' + error.message);
+    sendErrorNotification('错误信息: ' + error.message);
   }
 });
