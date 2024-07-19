@@ -1,4 +1,4 @@
-name: Create Release
+name: Create Release And Build
 on:
   push:
     tags:
@@ -9,8 +9,8 @@ permissions:
   packages: write
 
 jobs:
-  create-release:
-    name: Create Release
+  build:
+    name: Create Release And Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,13 +18,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+          apt-get update && apt-get install -y zip
+          zip -r Gopeed-Chrome-Extension.zip build
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Gopeed-Chrome-Extension.zip
 
       - run: npx changelogithub
         env:
