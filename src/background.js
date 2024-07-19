@@ -5,7 +5,6 @@ import { Client } from "../node_modules/@gopeed/rest";
 const Settings = {
   host: 'http://localhost:39666',
   token: 'qwqowo',
-  enableNotification: true,
   enabled: true,
 }
 
@@ -19,34 +18,12 @@ const initStorage = chrome.storage.local.get().then((items) => {
   });
 });
 
-const sendSuccessNotification = (message) => {
-  chrome.notifications.create({
-    type: 'basic',
-    iconUrl: "icons/icon_48.png",
-    title: '已创建下载任务',
-    message: message,
-  });
-}
-
-const sendErrorNotification = (message) => {
-  chrome.notifications.create({
-    type: 'basic',
-    iconUrl: "icons/icon_48.png",
-    title: '创建下载任务失败',
-    message: message,
-  });
-}
-
-
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.host) {
     Settings.host = changes.host.newValue;
   }
   if (changes.token) {
     Settings.token = changes.token.newValue;
-  }
-  if (changes.enableNotification) {
-    Settings.enableNotification = changes.enableNotification.newValue;
   }
   if (changes.enabled) {
     Settings.enabled = changes.enabled.newValue;
@@ -57,8 +34,12 @@ chrome.storage.onChanged.addListener((changes) => {
   });
 });
 
+const INFOCOLOR = '#6699FF';
+const ERRORCOLOR = '#FF3366';
+
 chrome.downloads.onDeterminingFilename.addListener(async function (item) {
-  if (item.mime === "application/octet-stream") {
+  console.log(item);
+  if (item.mime === "application/octet-stream" && item.finalUrl.startsWith("blob:")) {
     return;
   }
   await initStorage;
@@ -81,11 +62,21 @@ chrome.downloads.onDeterminingFilename.addListener(async function (item) {
         name: item.filename,
       }
     });
-    if (Settings.enableNotification) {
-      sendSuccessNotification('文件大小: ' + (item.fileSize / (1024 * 1024)).toFixed(2) + 'MB');
-    }
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        action: 'showNotification',
+        message: `正在下载: ${item.filename}, 文件大小: ${(item.fileSize / (1024 * 1024)).toFixed(2)}MB`,
+      })
+    });
   } catch (error) {
-    sendErrorNotification('错误信息: ' + error.message);
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        action: 'showNotification',
+        message: `下载${item.filename}失败: ${error.message}`,
+        color: ERRORCOLOR,
+        timeout: 4000,
+      })
+    });
   }
 });
 
@@ -98,22 +89,26 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
   await initStorage;
+
+  let downloadUrl = info.linkUrl || info.srcUrl || info.frameUrl;
+  if (info.mediaType) {
+    downloadUrl = info.frameUrl || downloadUrl;
+  }
+  if (!downloadUrl) {
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'showNotification',
+      message: '下载失败, 无法获取下载链接',
+      color: ERRORCOLOR,
+    })
+    return;
+  }
+  chrome.tabs.sendMessage(tab.id, {
+    action: 'showNotification',
+    message: '正在获取下载链接...',
+    color: INFOCOLOR,
+    timeout: 1500,
+  })
   try {
-    let downloadUrl = info.linkUrl || info.srcUrl || info.frameUrl;
-    if (info.mediaType) {
-      downloadUrl = info.frameUrl || downloadUrl;
-    }
-    if (!downloadUrl) {
-      chrome.notifications.create({
-        type: 'basic',
-        iconUrl: "icons/icon_48.png",
-        title: '创建下载任务失败',
-        message: '无法获取下载链接',
-      });
-    }
-    chrome.action.setBadgeText({
-      text: '🔗',
-    });
     const resolveResult = await client.resolve({
       url: downloadUrl,
       extra: {
@@ -128,13 +123,16 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
         name: resolveResult.res.files[0].name
       }
     })
-    chrome.action.setBadgeText({
-      text: '',
-    });
-    if (Settings.enableNotification) {
-      sendSuccessNotification('文件大小: ' + (resolveResult.res.files[0].size / (1024 * 1024)).toFixed(2) + 'MB');
-    }
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'showNotification',
+      message: `正在下载: ${resolveResult.res.files[0].name}, 文件大小: ${(resolveResult.res.files[0].size / (1024 * 1024)).toFixed(2)}MB`,
+    })
   } catch (error) {
-    sendErrorNotification('错误信息: ' + error.message);
+    chrome.tabs.sendMessage(tab.id, {
+      action: 'showNotification',
+      message: `下载${downloadUrl}失败: ${error.message}`,
+      color: ERRORCOLOR,
+      timeout: 4000,
+    })
   }
 });

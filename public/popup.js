@@ -1,13 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('saveButton');
     const successMessage = document.getElementById('successMessage');
-    chrome.storage.local.get(['enableNotification', 'enabled'], function (result) {
-        if (result.enableNotification === undefined) {
-            chrome.storage.local.set({ enableNotification: true });
-            document.getElementById('enableNotification').checked = true;
-        } else {
-            document.getElementById('enableNotification').checked = result.enableNotification;
-        }
+    chrome.storage.local.get(['enabled'], function (result) {
         if (result.enabled === undefined) {
             chrome.storage.local.set({ enabled: true });
             document.getElementById('enabled').checked = true;
@@ -18,9 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     saveButton.addEventListener('click', function () {
         const host = document.getElementById('host').value;
         const token = document.getElementById('token').value;
-        const enableNotification = document.getElementById('enableNotification').checked;
         const enabled = document.getElementById('enabled').checked;
-        chrome.storage.local.set({ host: host, token: token, enableNotification: enableNotification, enabled: enabled }, function () {
+        chrome.storage.local.set({ host: host, token: token, enabled: enabled }, function () {
             successMessage.style.display = 'block';
             setTimeout(function () {
                 successMessage.style.opacity = '1';

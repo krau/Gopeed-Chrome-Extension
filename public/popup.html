@@ -76,24 +76,17 @@
         transition: opacity 0.5s ease;
       }
 
-      .checkbox-group {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 15px;
-      }
-
-      /* 现代化的复选框样式 */
-      .modern-checkbox {
+      .custom-checkbox {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
       }
 
-      .modern-checkbox input[type="checkbox"] {
+      .custom-checkbox input[type="checkbox"] {
         display: none;
       }
 
-      .modern-checkbox label {
+      .custom-checkbox label {
         position: relative;
         padding-left: 30px;
         cursor: pointer;
@@ -101,7 +94,7 @@
         color: #333;
       }
 
-      .modern-checkbox label:before {
+      .custom-checkbox label:before {
         content: "";
         position: absolute;
         left: 0;
@@ -114,11 +107,11 @@
         transition: all 0.3s ease;
       }
 
-      .modern-checkbox input[type="checkbox"]:checked + label:before {
+      .custom-checkbox input[type="checkbox"]:checked + label:before {
         background-color: #4caf50;
       }
 
-      .modern-checkbox label:after {
+      .custom-checkbox label:after {
         content: "\2714";
         position: absolute;
         top: 0;
@@ -129,7 +122,7 @@
         opacity: 0;
       }
 
-      .modern-checkbox input[type="checkbox"]:checked + label:after {
+      .custom-checkbox input[type="checkbox"]:checked + label:after {
         opacity: 1;
       }
     </style>
@@ -143,19 +136,9 @@
         <input type="text" id="host" name="host" />
         <label for="token">Token:</label>
         <input type="text" id="token" name="token" />
-        <div class="checkbox-group">
-          <div class="modern-checkbox">
-            <input type="checkbox" id="enabled" name="enabled" />
-            <label for="enabled">自动接管</label>
-          </div>
-          <div class="modern-checkbox">
-            <input
-              type="checkbox"
-              id="enableNotification"
-              name="enableNotification"
-            />
-            <label for="enableNotification">启用通知</label>
-          </div>
+        <div class="custom-checkbox">
+          <input type="checkbox" id="enabled" name="enabled" />
+          <label for="enabled">自动接管</label>
         </div>
       </div>
       <button type="button" id="saveButton">保存</button>
