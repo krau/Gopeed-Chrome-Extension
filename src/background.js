@@ -57,6 +57,9 @@ chrome.storage.onChanged.addListener((changes) => {
 });
 
 chrome.downloads.onDeterminingFilename.addListener(async function (item) {
+  if (item.mime === "application/octet-stream") {
+    return;
+  }
   await initStorage;
   if (!Settings.enabled) {
     return;
@@ -107,6 +110,9 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
         message: '无法获取下载链接',
       });
     }
+    chrome.action.setBadgeText({
+      text: '🔗',
+    });
     const resolveResult = await client.resolve({
       url: downloadUrl,
       extra: {
@@ -121,6 +127,9 @@ chrome.contextMenus.onClicked.addListener(async function (info, tab) {
         name: resolveResult.res.files[0].name
       }
     })
+    chrome.action.setBadgeText({
+      text: '',
+    });
     if (Settings.enableNotification) {
       await sendSuccessNotification('文件大小: ' + (resolveResult.res.files[0].size / (1024 * 1024)).toFixed(2) + 'MB');
     }
