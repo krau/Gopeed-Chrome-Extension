@@ -1,279 +1,279 @@
 :root {
-    --primary-color: #4CAF50;
-    --primary-light: #81C784;
-    --primary-dark: #388E3C;
-    --background-color: #ffffff;
-    --text-color: #333333;
-    --border-color: #e0e0e0;
-    --success-color: #4CAF50;
-    --error-color: #f44336;
-    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --primary-color: #4caf50;
+  --primary-light: #81c784;
+  --primary-dark: #388e3c;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --success-color: #4caf50;
+  --error-color: #f44336;
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-    padding:30px;
-    width: 360px;
-    background-color: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  width: 360px;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .settings-form {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
-    margin-top:0;
-    color: var(--text-color);
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 24px;
-    letter-spacing: -0.5px;
+  margin-top: 0;
+  color: var(--text-color);
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
 }
 
 .input-group {
-    position: relative;
-    margin-bottom: 24px;
+  position: relative;
+  margin-bottom: 24px;
 }
 
 .input-group input {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    color: var(--text-color);
-    border: none;
-    border-bottom: 1px solid var(--border-color);
-    outline: none;
-    background: transparent;
-    transition: var(--transition);
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: var(--text-color);
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  outline: none;
+  background: transparent;
+  transition: var(--transition);
 }
 
 .input-group label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #757575;
-    pointer-events: none;
-    transition: var(--transition);
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #757575;
+  pointer-events: none;
+  transition: var(--transition);
 }
 
 .input-group .line {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: var(--transition);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: var(--transition);
 }
 
-.input-group input:focus~label,
-.input-group input:valid~label {
-    top: -20px;
-    font-size: 12px;
-    color: var(--primary-color);
-    font-weight: 500;
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+  top: -20px;
+  font-size: 12px;
+  color: var(--primary-color);
+  font-weight: 500;
 }
 
-.input-group input:focus~.line,
-.input-group input:valid~.line {
-    width: 100%;
+.input-group input:focus ~ .line,
+.input-group input:valid ~ .line {
+  width: 100%;
 }
 
 .input-group.error input {
-    border-bottom-color: var(--error-color);
+  border-bottom-color: var(--error-color);
 }
 
 .input-group.error .line {
-    background-color: var(--error-color);
+  background-color: var(--error-color);
 }
 
 @keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
 
-    0%,
-    100% {
-        transform: translateX(0);
-    }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-10px);
+  }
 
-    10%,
-    30%,
-    50%,
-    70%,
-    90% {
-        transform: translateX(-10px);
-    }
-
-    20%,
-    40%,
-    60%,
-    80% {
-        transform: translateX(10px);
-    }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(10px);
+  }
 }
 
 .input-group.error {
-    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
 .token-group {
-    position: relative;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #757575;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #757575;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .token-group:hover .toggle-password {
-    opacity: 1;
+  opacity: 1;
 }
 
 .toggle-password svg {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .toggle-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .toggle-label {
-    font-size: 16px;
-    color: var(--text-color);
-    font-weight: 500;
+  font-size: 16px;
+  color: var(--text-color);
+  font-weight: 500;
 }
 
 .toggle {
-    position: relative;
+  position: relative;
 }
 
 .toggle input {
-    display: none;
+  display: none;
 }
 
 .toggle-switch {
-    display: inline-block;
-    width: 52px;
-    height: 28px;
-    background-color: #ccc;
-    border-radius: 14px;
-    position: relative;
-    cursor: pointer;
-    transition: var(--transition);
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  background-color: #ccc;
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .toggle-switch:before {
-    content: '';
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    top: 2px;
-    left: 2px;
-    background-color: white;
-    transition: var(--transition);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background-color: white;
+  transition: var(--transition);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.toggle input:checked+.toggle-switch {
-    background-color: var(--primary-color);
+.toggle input:checked + .toggle-switch {
+  background-color: var(--primary-color);
 }
 
-.toggle input:checked+.toggle-switch:before {
-    transform: translateX(24px);
+.toggle input:checked + .toggle-switch:before {
+  transform: translateX(24px);
 }
 
 .save-button {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
 }
 
 .save-button:hover {
-    background-color: var(--primary-dark);
+  background-color: var(--primary-dark);
 }
 
 .save-button .button-text {
-    transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .save-button .success-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .save-button.success .button-text {
-    opacity: 0;
+  opacity: 0;
 }
 
 .save-button.success .success-text {
-    opacity: 1;
+  opacity: 1;
 }
 
 .save-button.success {
-    background-color: var(--success-color);
-    cursor: default;
+  background-color: var(--success-color);
+  cursor: default;
 }
 
 @keyframes checkmark {
-    0% {
-        transform: translate(-50%, -50%) scale(0);
-    }
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
 
-    50% {
-        transform: translate(-50%, -50%) scale(1.2);
-    }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
 
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-    }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }

@@ -24,23 +24,23 @@ document.addEventListener('DOMContentLoaded', function () {
             hostInput.parentElement.classList.add('error');
             setTimeout(() => {
                 hostInput.parentElement.classList.remove('error');
-            }, 820); 
+            }, 820);
             return;
         }
 
         chrome.storage.local.set({ host: host, token: token, enabled: enabled }, function () {
             saveButton.classList.add('success');
-            
+
             setTimeout(function () {
                 saveButton.classList.remove('success');
             }, 1500);
         });
     });
 
-    toggleTokenButton.addEventListener('click', function() {
+    toggleTokenButton.addEventListener('click', function () {
         const eyeIcon = toggleTokenButton.querySelector('.eye-icon');
         const eyeOffIcon = toggleTokenButton.querySelector('.eye-off-icon');
-        
+
         if (tokenInput.type === 'password') {
             tokenInput.type = 'text';
             eyeIcon.style.display = 'none';
