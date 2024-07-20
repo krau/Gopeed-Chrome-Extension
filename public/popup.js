@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById('saveButton');
-    const successMessage = document.getElementById('successMessage');
+    const hostInput = document.getElementById('host');
+    const tokenInput = document.getElementById('token');
+    const toggleTokenButton = document.getElementById('toggleToken');
+
+    const DEFAULT_HOST = 'http://127.0.0.1:39666';
+
     chrome.storage.local.get(['enabled'], function (result) {
         if (result.enabled === undefined) {
             chrome.storage.local.set({ enabled: true });
@@ -9,29 +14,48 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('enabled').checked = result.enabled;
         }
     });
+
     saveButton.addEventListener('click', function () {
-        const host = document.getElementById('host').value;
-        const token = document.getElementById('token').value;
+        const host = hostInput.value || DEFAULT_HOST;
+        const token = tokenInput.value;
         const enabled = document.getElementById('enabled').checked;
+
+        if (!host) {
+            hostInput.parentElement.classList.add('error');
+            setTimeout(() => {
+                hostInput.parentElement.classList.remove('error');
+            }, 820); 
+            return;
+        }
+
         chrome.storage.local.set({ host: host, token: token, enabled: enabled }, function () {
-            successMessage.style.display = 'block';
+            saveButton.classList.add('success');
+            
             setTimeout(function () {
-                successMessage.style.opacity = '1';
-            }, 10);
-            setTimeout(function () {
-                successMessage.style.opacity = '0';
-                setTimeout(function () {
-                    successMessage.style.display = 'none';
-                }, 500);
-            }, 2000);
+                saveButton.classList.remove('success');
+            }, 1500);
         });
     });
-    chrome.storage.local.get(['host', 'token'], function (result) {
-        if (result.host) {
-            document.getElementById('host').value = result.host;
+
+    toggleTokenButton.addEventListener('click', function() {
+        const eyeIcon = toggleTokenButton.querySelector('.eye-icon');
+        const eyeOffIcon = toggleTokenButton.querySelector('.eye-off-icon');
+        
+        if (tokenInput.type === 'password') {
+            tokenInput.type = 'text';
+            eyeIcon.style.display = 'none';
+            eyeOffIcon.style.display = 'inline';
+        } else {
+            tokenInput.type = 'password';
+            eyeIcon.style.display = 'inline';
+            eyeOffIcon.style.display = 'none';
         }
+    });
+
+    chrome.storage.local.get(['host', 'token'], function (result) {
+        hostInput.value = result.host || DEFAULT_HOST;
         if (result.token) {
-            document.getElementById('token').value = result.token;
+            tokenInput.value = result.token;
         }
     });
 });

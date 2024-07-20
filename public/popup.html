@@ -1,28 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gopeed</title>
-    <link rel="stylesheet" href="popup.css" />
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gopeed Settings</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="gopeed-settings" class="title">Gopeed Settings</h2>
 
-  <body>
-    <form>
-      <h2>Gopeed Settings</h2>
-      <div>
-        <label for="host">Host:</label>
-        <input type="text" id="host" name="host" />
-        <label for="token">Token:</label>
-        <input type="text" id="token" name="token" />
-        <div class="custom-checkbox">
-          <input type="checkbox" id="enabled" name="enabled" />
-          <label for="enabled">自动接管</label>
+        <div class="input-group">
+            <input type="text" id="host" required>
+            <label for="host">Host*</label>
+            <div class="line"></div>
         </div>
-      </div>
-      <button type="button" id="saveButton">保存</button>
-      <div class="success-message" id="successMessage">设置已保存</div>
-    </form>
+
+        <div class="input-group token-group">
+            <input type="password" id="token" required>
+            <label for="token">Token</label>
+            <div class="line"></div>
+            <button id="toggleToken" class="toggle-password">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="toggle-group">
+            <span class="toggle-label">自动接管</span>
+            <label class="toggle">
+                <input type="checkbox" id="enabled">
+                <span class="toggle-switch"></span>
+            </label>
+        </div>
+
+        <button id="saveButton" class="save-button">
+            <span class="button-text">保存</span>
+            <span class="success-text">保存成功</span>
+        </button>
+    </div>
+
     <script src="popup.js"></script>
-  </body>
+</body>
 </html>
