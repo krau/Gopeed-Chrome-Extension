@@ -32,7 +32,7 @@ jobs:
       - name: Archive
         uses: montudor/action-zip@v1.0.0
         with:
-          args: zip -r Gopeed-Chrome-Extension.zip build
+          args: cd build && zip -r ../Gopeed-Chrome-Extension.zip .
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
