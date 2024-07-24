@@ -13,44 +13,72 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  background-color: var(--background-color);
   color: var(--text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
-  padding: 0;
+  min-width: 350px;
+  background-color: #f5f5f5;
 }
 
 .container {
-  padding: 30px;
-  width: 360px;
   background-color: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 400px;
 }
 
-.settings-form {
-  padding: 24px;
+.tab-switch {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f1f3f5;
+  border-radius: 20px;
+  padding: 5px;
+  position: relative;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.title {
-  margin-top: 0;
-  color: var(--text-color);
-  font-size: 24px;
-  font-weight: 600;
+.tab-button {
+  flex: 1;
+  padding: 10px;
   text-align: center;
-  margin-bottom: 24px;
-  letter-spacing: -0.5px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.tab-button.active {
+  color: white;
+}
+
+.slider {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: calc(50% - 5px);
+  height: calc(100% - 10px);
+  background-color: var(--primary-color);
+  border-radius: 15px;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tab-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
 }
 
 .input-group {
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .input-group input {
@@ -59,7 +87,7 @@ body {
   font-size: 16px;
   color: var(--text-color);
   border: none;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
   outline: none;
   background: transparent;
   transition: var(--transition);
@@ -67,11 +95,10 @@ body {
 
 .input-group label {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 0;
-  padding: 10px 0;
   font-size: 16px;
-  color: #757575;
+  color: #999;
   pointer-events: none;
   transition: var(--transition);
 }
@@ -88,49 +115,14 @@ body {
 
 .input-group input:focus ~ label,
 .input-group input:valid ~ label {
-  top: -20px;
+  top: -10px;
   font-size: 12px;
   color: var(--primary-color);
-  font-weight: 500;
 }
 
 .input-group input:focus ~ .line,
 .input-group input:valid ~ .line {
   width: 100%;
-}
-
-.input-group.error input {
-  border-bottom-color: var(--error-color);
-}
-
-.input-group.error .line {
-  background-color: var(--error-color);
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-10px);
-  }
-
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(10px);
-  }
-}
-
-.input-group.error {
-  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
 .token-group {
@@ -140,79 +132,67 @@ body {
 .toggle-password {
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 10px;
   background: none;
   border: none;
   cursor: pointer;
-  color: #757575;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.token-group:hover .toggle-password {
-  opacity: 1;
-}
-
-.toggle-password svg {
-  width: 20px;
-  height: 20px;
+  color: #999;
 }
 
 .toggle-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .toggle-label {
   font-size: 16px;
   color: var(--text-color);
-  font-weight: 500;
 }
 
 .toggle {
   position: relative;
-}
-
-.toggle input {
-  display: none;
-}
-
-.toggle-switch {
   display: inline-block;
   width: 52px;
   height: 28px;
-  background-color: #ccc;
-  border-radius: 14px;
-  position: relative;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch {
+  position: absolute;
   cursor: pointer;
-  transition: var(--transition);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
 }
 
 .toggle-switch:before {
-  content: "";
   position: absolute;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
   background-color: white;
-  transition: var(--transition);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: 0.4s;
+  border-radius: 50%;
 }
 
-.toggle input:checked + .toggle-switch {
+input:checked + .toggle-switch {
   background-color: var(--primary-color);
 }
 
-.toggle input:checked + .toggle-switch:before {
+input:checked + .toggle-switch:before {
   transform: translateX(24px);
 }
 
@@ -222,23 +202,22 @@ body {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .save-button:hover {
   background-color: var(--primary-dark);
 }
 
-.save-button .button-text {
+.save-button .button-text,
+.save-button .success-text {
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -248,7 +227,6 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
 }
 
 .save-button.success .button-text {
@@ -259,21 +237,345 @@ body {
   opacity: 1;
 }
 
-.save-button.success {
-  background-color: var(--success-color);
-  cursor: default;
+.blacklist-container {
+  margin-top: 20px;
 }
 
-@keyframes checkmark {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-  }
+.current-site {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  background-color: #f1f3f5;
+  padding: 10px;
+  border-radius: 4px;
+  position: relative; /* Add this */
+}
 
-  50% {
-    transform: translate(-50%, -50%) scale(1.2);
-  }
+.current-site .add-button {
+  position: absolute; /* Add this */
+  right: 0; /* Add this */
+  top: 50%; /* Add this */
+  transform: translateY(-50%); /* Add this */
+}
 
+.current-site span {
+  padding-right: 70px;
+}
+
+.add-button {
+  padding: 8px 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#currentSite {
+  font-size: 14px;
+}
+
+.manual-input {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.manual-input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+}
+
+.manual-input .add-button {
+  border-radius: 0 4px 4px 0;
+}
+
+.search-container {
+  margin-bottom: 15px;
+}
+
+#searchBlacklist {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#blacklistItems {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#blacklistItems li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+#blacklistItems li:hover {
+  background-color: #f9f9f9;
+}
+
+#blacklistItems li button {
+  padding: 5px 10px;
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+#blacklistItems li button:hover {
+  background-color: #c0392b;
+}
+
+.load-more {
+  text-align: center;
+  padding: 10px;
+  background-color: #f1f3f5;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 4px;
+  transition: var(--transition);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.load-more:hover {
+  background-color: #e9ecef;
+}
+
+@keyframes shake {
+  0%,
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateX(0);
   }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.input-group.error input {
+  border-bottom-color: var(--error-color);
+}
+
+.input-group.error .line {
+  background-color: var(--error-color);
+}
+
+.input-group.error {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 12px;
+  margin-top: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.input-group.error .error-message {
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.tab-content.active {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Scrollbar styling */
+#blacklistItems::-webkit-scrollbar {
+  width: 8px;
+}
+
+#blacklistItems::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#blacklistItems::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+#blacklistItems::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive design */
+@media (max-width: 400px) {
+  .container {
+    padding: 15px;
+  }
+
+  .tab-switch {
+    font-size: 14px;
+  }
+
+  .input-group input,
+  .input-group label {
+    font-size: 14px;
+  }
+
+  .save-button {
+    font-size: 14px;
+  }
+}
+
+/* SVG icon fixes */
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-password .eye-icon,
+.toggle-password .eye-off-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Premium feel enhancements */
+.container {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.tab-switch,
+.current-site,
+.manual-input input,
+#searchBlacklist,
+.load-more {
+  backdrop-filter: blur(5px);
+  background-color: rgba(241, 243, 245, 0.8);
+}
+
+.save-button,
+.add-button {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.save-button:hover,
+.add-button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.save-button:active,
+.add-button:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Elegant transitions */
+.tab-content {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(10px);
+}
+
+.tab-content.active {
+  transform: translateY(0);
+}
+
+#blacklistItems li {
+  transition: all 0.3s ease;
+}
+
+/* Adjusting the search blacklist input style to prevent overflow */
+#searchBlacklist {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.token-group .toggle-password {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.token-group:hover .toggle-password {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.token-group .toggle-password {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.in-blacklist {
+  background-color: var(--error-color);
+}
+
+/* New styles for consistent blacklist item appearance */
+#blacklistItems li {
+  background-color: #f1f3f5;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  border: none;
+}
+
+/* Style for invalid input */
+.manual-input input.invalid {
+  border-color: var(--error-color);
+}
+
+.manual-input .error-message {
+  display: none;
+  color: var(--error-color);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.manual-input .error-message.show {
+  display: block;
 }

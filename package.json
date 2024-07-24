@@ -1,6 +1,6 @@
 {
   "name": "gopeed",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "A Chrome Extension for Gopeed",
   "homepage": "https://github/krau/Gopeed-Chrome-Extension",
   "private": true,
