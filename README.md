@@ -12,6 +12,8 @@
 
 </div>
 
+<br>
+
 ## 📱 预览
 
 <br>
@@ -39,6 +41,8 @@
 安装后, 要[开启 Gopeed 的 API](https://docs.gopeed.com/zh/dev-api.html) , 并在插件设置中正确填写你设置的地址 (Host) 和令牌 (Token).
 
 注意 Host 要带上协议头, 如 `http://` 或 `https://`.
+
+<br>
 
 
 ## 🦊 Firefox 版本
