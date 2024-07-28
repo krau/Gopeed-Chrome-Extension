@@ -89,7 +89,6 @@ function showNotification(message, color, timeout) {
 }
 
 async function showCustomOptionsDialog(downloadUrl, filename, fileSize) {
-  // Ensure filename is not empty
   if (!filename) {
     filename = await getFilenameFromUrl(downloadUrl);
   }
@@ -121,6 +120,7 @@ async function showCustomOptionsDialog(downloadUrl, filename, fileSize) {
       transform: scale(0.9) !important;
       opacity: 0 !important;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      box-sizing: border-box !important;
     `;
 
     dialog.innerHTML = `
@@ -129,21 +129,21 @@ async function showCustomOptionsDialog(downloadUrl, filename, fileSize) {
         fileSize /
         (1024 * 1024)
       ).toFixed(2)} MB</p>
-      <div style="margin-bottom: 25px !important;">
+      <div style="margin-bottom: 25px !important; box-sizing: border-box !important;">
         <label for="customUrlInput" style="display: block !important; margin-bottom: 8px !important; color: #555 !important; font-size: 14px !important; font-weight: 500 !important;">下载链接:</label>
-        <input type="text" id="customUrlInput" value="${downloadUrl}" style="background-color:white!important;color:black!important;width:100% !important; padding: 12px 15px !important; border: 1px solid #e0e0e0 !important; border-radius: 8px !important; font-size: 16px !important; transition: all 0.3s ease !important;">
+        <input type="text" id="customUrlInput" value="${downloadUrl}" style="background-color:white!important;color:black!important;width:100% !important; padding: 12px 15px !important; border: 1px solid #e0e0e0 !important; border-radius: 8px !important; font-size: 16px !important; transition: all 0.3s ease !important; box-sizing: border-box !important;">
       </div>
-      <div style="margin-bottom: 25px !important;">
+      <div style="margin-bottom: 25px !important; box-sizing: border-box !important;">
         <label for="customNameInput" style="display: block !important; margin-bottom: 8px !important; color: #555 !important; font-size: 14px !important; font-weight: 500 !important;">文件名:</label>
-        <input type="text" id="customNameInput" value="${filename}" style="background-color:white!important;color:black!important;width: 100% !important; padding: 12px 15px !important; border: 1px solid #e0e0e0 !important; border-radius: 8px !important; font-size: 16px !important; transition: all 0.3s ease !important;">
+        <input type="text" id="customNameInput" value="${filename}" style="background-color:white!important;color:black!important;width: 100% !important; padding: 12px 15px !important; border: 1px solid #e0e0e0 !important; border-radius: 8px !important; font-size: 16px !important; transition: all 0.3s ease !important; box-sizing: border-box !important;">
       </div>
-      <div style="margin-bottom: 30px !important;">
+      <div style="margin-bottom: 30px !important; box-sizing: border-box !important;">
         <label for="connectionsSlider" style="display: block !important; margin-bottom: 8px !important; color: #555 !important; font-size: 14px !important; font-weight: 500 !important;">线程数: <span id="connectionsValue" style="font-weight: 600 !important; color: #4CAF50 !important;">1</span></label>
-        <input type="range" id="connectionsSlider" min="1" max="32" value="32" style="width: 100% !important; -webkit-appearance: none !important; height: 6px !important; background: #e0e0e0 !important; border-radius: 3px !important; outline: none !important; opacity: 0.7 ; transition: opacity 0.2s ;">
+        <input type="range" id="connectionsSlider" min="1" max="32" value="32" style="width: 100% !important; -webkit-appearance: none !important; height: 6px !important; background: #e0e0e0 !important; border-radius: 3px !important; outline: none !important; opacity: 0.7 ; transition: opacity 0.2s ; box-sizing: border-box !important;">
       </div>
-      <div style="display: flex !important; justify-content: flex-end !important;">
-        <button id="cancelButton" style="margin-right: 15px !important; padding: 12px 25px !important; background-color: #f1f3f5 !important; color: #333 !important; border: none !important; border-radius: 8px !important; cursor: pointer !important; font-size: 16px !important; font-weight: 500 !important; transition: all 0.3s ease !important;">取消</button>
-        <button id="confirmButton" style="padding: 12px 25px !important; background-color: #4CAF50 !important; color: white !important; border: none !important; border-radius: 8px !important; cursor: pointer !important; font-size: 16px !important; font-weight: 500 !important; transition: all 0.3s ease !important;">确认</button>
+      <div style="display: flex !important; justify-content: flex-end !important; box-sizing: border-box !important;">
+        <button id="cancelButton" style="margin-right: 15px !important; padding: 12px 25px !important; background-color: #f1f3f5 !important; color: #333 !important; border: none !important; border-radius: 8px !important; cursor: pointer !important; font-size: 16px !important; font-weight: 500 !important; transition: all 0.3s ease !important; box-sizing: border-box !important;">取消</button>
+        <button id="confirmButton" style="padding: 12px 25px !important; background-color: #4CAF50 !important; color: white !important; border: none !important; border-radius: 8px !important; cursor: pointer !important; font-size: 16px !important; font-weight: 500 !important; transition: all 0.3s ease !important; box-sizing: border-box !important;">确认</button>
       </div>
     `;
 
@@ -157,14 +157,12 @@ async function showCustomOptionsDialog(downloadUrl, filename, fileSize) {
     const cancelButton = document.getElementById("cancelButton");
     const confirmButton = document.getElementById("confirmButton");
 
-    // Fade in animation
     setTimeout(() => {
       overlay.style.opacity = "1 ";
       dialog.style.transform = "scale(1) !important";
       dialog.style.opacity = "1 ";
     }, 50);
 
-    // Custom slider styles
     connectionsSlider.style.setProperty(
       "--slider-thumb-color",
       "#4CAF50",
