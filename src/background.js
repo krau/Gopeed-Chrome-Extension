@@ -141,7 +141,6 @@ chrome.downloads.onCreated.addListener((item) => {
   if (!Settings.enabled) return;
 
   const downloadUrl = item.finalUrl || item.url;
-  const sourceUrl = item.referrer || item.url;
 
   if (downloadUrl.startsWith("blob:") || downloadUrl.startsWith("data:")) {
     console.log(
@@ -268,7 +267,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   })().catch(console.error);
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
   if (message.action === "updateBlacklist") {
     blacklist = message.blacklist;
     chrome.storage.local.set({ blacklist: blacklist });
