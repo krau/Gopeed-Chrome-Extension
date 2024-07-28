@@ -6,14 +6,21 @@ const Settings = {
   token: "qwqowo",
   enabled: true,
   customDownloadOptions: false,
-  blacklist: [],
 };
 
 let client;
+let blacklist = [];
 
 const initSettings = async () => {
-  const items = await chrome.storage.local.get();
+  const items = await chrome.storage.local.get([
+    "host",
+    "token",
+    "enabled",
+    "customDownloadOptions",
+    "blacklist",
+  ]);
   Object.assign(Settings, items);
+  blacklist = items.blacklist || [];
   client = new Client({
     host: Settings.host,
     token: Settings.token,
@@ -24,6 +31,9 @@ chrome.storage.onChanged.addListener((changes) => {
   for (let [key, { newValue }] of Object.entries(changes)) {
     if (key in Settings) {
       Settings[key] = newValue;
+    }
+    if (key === "blacklist") {
+      blacklist = newValue || [];
     }
   }
   client = new Client({
@@ -37,7 +47,7 @@ const ERRORCOLOR = "#FF3366";
 
 async function isUrlInBlacklist(url) {
   const hostname = new URL(url).hostname;
-  return Settings.blacklist.some(
+  return blacklist.some(
     (blacklistedHostname) =>
       hostname === blacklistedHostname ||
       hostname.endsWith(`.${blacklistedHostname}`)
@@ -260,7 +270,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "updateBlacklist") {
-    Settings.blacklist = message.blacklist;
+    blacklist = message.blacklist;
+    chrome.storage.local.set({ blacklist: blacklist });
   }
 });
 
