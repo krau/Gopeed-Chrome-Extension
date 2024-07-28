@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const DEFAULT_HOST = "http://127.0.0.1:39666";
   let currentUrl = "";
-  let blacklist = [];
+  let blacklist = {};
   let displayedItems = 0;
   const itemsPerPage = 10;
 
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
       enabledCheckbox.checked = result.enabled !== false;
       customDownloadOptionsCheckbox.checked =
         result.customDownloadOptions || false;
-      blacklist = result.blacklist || [];
+      blacklist = result.blacklist || {};
       displayBlacklistItems();
       updateCurrentSiteButton();
     }
@@ -138,11 +138,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function toggleBlacklistItem(hostname) {
-    const index = blacklist.indexOf(hostname);
-    if (index > -1) {
-      blacklist.splice(index, 1);
+    if (blacklist.hasOwnProperty(hostname)) {
+      delete blacklist[hostname];
     } else {
-      blacklist.push(hostname);
+      blacklist[hostname] = {};
     }
     chrome.storage.local.set({ blacklist: blacklist }, function () {
       displayBlacklistItems();
@@ -157,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateCurrentSiteButton() {
     if (currentUrl) {
       const hostname = new URL(currentUrl).hostname;
-      if (blacklist.includes(hostname)) {
+      if (blacklist.hasOwnProperty(hostname)) {
         addToBlacklistButton.textContent = "移除";
         addToBlacklistButton.classList.add("in-blacklist");
       } else {
@@ -169,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function displayBlacklistItems(loadMore = false, isSearch = false) {
     const searchTerm = searchBlacklist.value.toLowerCase();
-    const filteredBlacklist = blacklist.filter((item) =>
+    const filteredBlacklist = Object.keys(blacklist).filter((item) =>
       item.toLowerCase().includes(searchTerm)
     );
 

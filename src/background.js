@@ -9,7 +9,6 @@ const Settings = {
 };
 
 let client;
-let blacklist = [];
 
 const initSettings = async () => {
   const items = await chrome.storage.local.get([
@@ -20,7 +19,6 @@ const initSettings = async () => {
     "blacklist",
   ]);
   Object.assign(Settings, items);
-  blacklist = items.blacklist || [];
   client = new Client({
     host: Settings.host,
     token: Settings.token,
@@ -31,9 +29,6 @@ chrome.storage.onChanged.addListener((changes) => {
   for (let [key, { newValue }] of Object.entries(changes)) {
     if (key in Settings) {
       Settings[key] = newValue;
-    }
-    if (key === "blacklist") {
-      blacklist = newValue || [];
     }
   }
   client = new Client({
@@ -46,12 +41,10 @@ const INFOCOLOR = "#6699FF";
 const ERRORCOLOR = "#FF3366";
 
 async function isUrlInBlacklist(url) {
+  const result = await chrome.storage.local.get(["blacklist"]);
+  const blacklist = result.blacklist || {};
   const hostname = new URL(url).hostname;
-  return blacklist.some(
-    (blacklistedHostname) =>
-      hostname === blacklistedHostname ||
-      hostname.endsWith(`.${blacklistedHostname}`)
-  );
+  return blacklist.hasOwnProperty(hostname);
 }
 
 async function handleDownload(downloadUrl, sourceUrl, filename, fileSize) {
@@ -113,7 +106,7 @@ async function handleDownload(downloadUrl, sourceUrl, filename, fileSize) {
 
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tabs.length > 0) {
-      await chrome.tabs.sendMessage(tabs[0].id, {
+      chrome.tabs.sendMessage(tabs[0].id, {
         action: "showNotification",
         message: `正在下载: ${customOptions.name}, 文件大小: ${(
           fileSize /
@@ -125,7 +118,7 @@ async function handleDownload(downloadUrl, sourceUrl, filename, fileSize) {
     console.error("Error in handleDownload:", error);
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tabs.length > 0) {
-      await chrome.tabs.sendMessage(tabs[0].id, {
+      chrome.tabs.sendMessage(tabs[0].id, {
         action: "showNotification",
         message: `下载${filename}失败: ${error.message}`,
         color: ERRORCOLOR,
@@ -200,6 +193,7 @@ async function processDownload(downloadId) {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.removeAll();
   chrome.contextMenus.create({
     id: "createTask",
     title: "使用Gopeed下载",
@@ -207,71 +201,66 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  (async () => {
-    await initSettings();
-
-    let downloadUrl = info.linkUrl || info.srcUrl || info.frameUrl;
-    if (info.mediaType) {
-      downloadUrl = info.frameUrl || downloadUrl;
-    }
-    if (!downloadUrl) {
-      await chrome.tabs.sendMessage(tab.id, {
-        action: "showNotification",
-        message: "下载失败, 无法获取下载链接",
-        color: ERRORCOLOR,
-      });
-      return;
-    }
-
-    if (downloadUrl.startsWith("blob:") || downloadUrl.startsWith("data:")) {
-      await chrome.tabs.sendMessage(tab.id, {
-        action: "showNotification",
-        message: "无法拦截 blob: 或 data: 开头的下载链接",
-        color: INFOCOLOR,
-        timeout: 3000,
-      });
-      return;
-    }
-
-    await chrome.tabs.sendMessage(tab.id, {
+chrome.contextMenus.onClicked.addListener(async function (info, tab) {
+  await initSettings();
+  console.log("Context menu clicked:", info, tab);
+  let downloadUrl =
+    info.linkUrl || info.srcUrl || info.frameUrl || info.pageUrl;
+  if (!downloadUrl) {
+    chrome.tabs.sendMessage(tab.id, {
       action: "showNotification",
-      message: "正在获取下载链接...",
-      color: INFOCOLOR,
-      timeout: 1500,
+      message: "下载失败, 无法获取下载链接",
+      color: ERRORCOLOR,
     });
+    return;
+  }
 
-    try {
-      const resolveResult = await client.resolve({
-        url: downloadUrl,
-        extra: {
-          header: {
-            Referer: tab.url || downloadUrl,
-          },
+  if (downloadUrl.startsWith("blob:") || downloadUrl.startsWith("data:")) {
+    chrome.tabs.sendMessage(tab.id, {
+      action: "showNotification",
+      message: "无法拦截 blob: 或 data: 开头的下载链接",
+      color: INFOCOLOR,
+      timeout: 3000,
+    });
+    return;
+  }
+
+  chrome.tabs.sendMessage(tab.id, {
+    action: "showNotification",
+    message: "正在获取下载链接...",
+    color: INFOCOLOR,
+    timeout: 1500,
+  });
+
+  try {
+    const resolveResult = await client.resolve({
+      url: downloadUrl,
+      extra: {
+        header: {
+          Referer: tab.url || downloadUrl,
         },
-      });
-      await handleDownload(
-        downloadUrl,
-        tab.url,
-        resolveResult.res.files[0].name,
-        resolveResult.res.files[0].size
-      );
-    } catch (error) {
-      await chrome.tabs.sendMessage(tab.id, {
-        action: "showNotification",
-        message: `下载${downloadUrl}失败: ${error.message}`,
-        color: ERRORCOLOR,
-        timeout: 4000,
-      });
-    }
-  })().catch(console.error);
+      },
+    });
+    await handleDownload(
+      downloadUrl,
+      tab.url,
+      resolveResult.res.files[0].name,
+      resolveResult.res.files[0].size
+    );
+  } catch (error) {
+    chrome.tabs.sendMessage(tab.id, {
+      action: "showNotification",
+      message: `下载${downloadUrl}失败: ${error.message}`,
+      color: ERRORCOLOR,
+      timeout: 4000,
+    });
+  }
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
   if (message.action === "updateBlacklist") {
-    blacklist = message.blacklist;
-    chrome.storage.local.set({ blacklist: blacklist });
+    chrome.storage.local.set({ blacklist: message.blacklist });
   }
 });
 
-initSettings();
+await initSettings();

@@ -250,7 +250,7 @@ async function getFilenameFromUrl(url) {
   }
 }
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (message, _sender, sendResponse) {
   if (message.action === "showNotification") {
     showNotification(message.message, message.color, message.timeout);
   } else if (message.action === "showCustomOptionsDialog") {
