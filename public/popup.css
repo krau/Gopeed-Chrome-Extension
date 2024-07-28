@@ -84,7 +84,7 @@ body {
 .input-group input {
   width: 100%;
   padding: 10px 0;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--text-color);
   border: none;
   border-bottom: 2px solid var(--border-color);
@@ -97,7 +97,7 @@ body {
   position: absolute;
   top: 10px;
   left: 0;
-  font-size: 16px;
+  font-size: 14px;
   color: #999;
   pointer-events: none;
   transition: var(--transition);
@@ -147,7 +147,7 @@ body {
 }
 
 .toggle-label {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--text-color);
 }
 
@@ -203,7 +203,7 @@ input:checked + .toggle-switch:before {
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
@@ -403,7 +403,6 @@ input:checked + .toggle-switch:before {
   opacity: 1;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -428,7 +427,6 @@ input:checked + .toggle-switch:before {
   animation: fadeIn 0.3s ease forwards;
 }
 
-/* Scrollbar styling */
 #blacklistItems::-webkit-scrollbar {
   width: 8px;
 }
@@ -447,27 +445,6 @@ input:checked + .toggle-switch:before {
   background: #555;
 }
 
-/* Responsive design */
-@media (max-width: 400px) {
-  .container {
-    padding: 15px;
-  }
-
-  .tab-switch {
-    font-size: 14px;
-  }
-
-  .input-group input,
-  .input-group label {
-    font-size: 14px;
-  }
-
-  .save-button {
-    font-size: 14px;
-  }
-}
-
-/* SVG icon fixes */
 .toggle-password svg {
   width: 20px;
   height: 20px;
@@ -482,7 +459,6 @@ input:checked + .toggle-switch:before {
   transform: translate(-50%, -50%);
 }
 
-/* Premium feel enhancements */
 .container {
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.8);
@@ -514,7 +490,6 @@ input:checked + .toggle-switch:before {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Elegant transitions */
 .tab-content {
   transition: opacity 0.3s ease, transform 0.3s ease;
   transform: translateY(10px);
@@ -528,7 +503,6 @@ input:checked + .toggle-switch:before {
   transition: all 0.3s ease;
 }
 
-/* Adjusting the search blacklist input style to prevent overflow */
 #searchBlacklist {
   width: 100%;
   box-sizing: border-box;
@@ -556,7 +530,6 @@ input:checked + .toggle-switch:before {
   background-color: var(--error-color);
 }
 
-/* New styles for consistent blacklist item appearance */
 #blacklistItems li {
   background-color: #f1f3f5;
   border-radius: 4px;
@@ -564,7 +537,6 @@ input:checked + .toggle-switch:before {
   border: none;
 }
 
-/* Style for invalid input */
 .manual-input input.invalid {
   border-color: var(--error-color);
 }
@@ -578,4 +550,14 @@ input:checked + .toggle-switch:before {
 
 .manual-input .error-message.show {
   display: block;
+}
+
+#advancedSettings {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+#advancedSettings .toggle-group {
+  margin-left: 20px;
 }
