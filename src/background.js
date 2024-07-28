@@ -203,7 +203,6 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.contextMenus.onClicked.addListener(async function (info, tab) {
   await initSettings();
-  console.log("Context menu clicked:", info, tab);
   let downloadUrl =
     info.linkUrl || info.srcUrl || info.frameUrl || info.pageUrl;
   if (!downloadUrl) {
