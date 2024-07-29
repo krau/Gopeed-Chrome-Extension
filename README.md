@@ -30,6 +30,16 @@
 
 <br>
 
+## ⚠ 提示
+
+如果您在使用过程中有任何问题、建议，请直接在当前仓库发起 Issue 。
+
+功能性建议若需依赖于 Gopeed 本体，则暂无法支持，**本插件为个人维护的第三方插件**。
+
+本插件所遇问题与官方无关，您可以转而尝试 [官方插件](https://github.com/GopeedLab/browser-extension)  ，但**请不要在官方仓库反馈本插件的问题**。
+
+<br>
+
 ## ❓ 安装与使用
 
 <img src="images/sticker.png"  style="height: 50px;width: 50px"> 由于 Chrome 商店开发者注册要 5 美刀, 本人不想花这个钱. 
@@ -45,7 +55,6 @@
 注意 Host 要带上协议头, 如 `http://` 或 `https://`.
 
 <br>
-
 
 ## 🦊 Firefox 版本
 
