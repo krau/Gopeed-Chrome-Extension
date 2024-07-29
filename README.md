@@ -2,7 +2,9 @@
 
 # <img src="public/icons/icon_48.png" width="45" align="center"> Gopeed Chrome Extension
 
-将浏览器下载自动传递到 [Gopeed](https://gopeed.com/zh-CN) 下载器.
+将浏览器下载自动传递到 [Gopeed](https://gopeed.com/zh-CN) 下载器
+
+⚠ 插件为个人开发，若遇问题可在本仓库创建 Issue，而非向官方反馈
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![GitHub stars](https://img.shields.io/github/stars/krau/Gopeed-Chrome-Extension?style=for-the-badge)
@@ -11,12 +13,6 @@
 ![GitHub forks](https://img.shields.io/github/forks/krau/Gopeed-Chrome-Extension?style=for-the-badge)
 
 </div>
-
-## 请不要向 Gopeed 官方反馈本插件的问题
-
-❗注意: 本插件非 Gopeed 官方开发, 请直接在本仓库提起 issue, 不要去向官方反馈任何本插件的问题.
-
-如有需要, 你也可以选择使用 Gopeed 官方提供的插件: https://github.com/GopeedLab/browser-extension
 
 <br>
 
