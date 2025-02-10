@@ -17,61 +17,82 @@
 
       <div id="settings" class="tab-content active">
         <form id="settings-form">
-          <div class="input-group">
-            <input type="text" id="host" required />
-            <span class="line"></span>
-            <label for="host">Host*</label>
+          <div class="settings-section">
+            <div class="input-group">
+              <input type="text" id="host" required />
+              <span class="line"></span>
+              <label for="host">Host*</label>
+            </div>
+            <div class="input-group token-group">
+              <input type="password" id="token" required />
+              <span class="line"></span>
+              <label for="token">Token</label>
+              <button type="button" id="toggleToken" class="toggle-password">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="eye-icon"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="eye-off-icon"
+                  style="display: none"
+                >
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                  ></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
           </div>
-          <div class="input-group token-group">
-            <input type="password" id="token" required />
-            <span class="line"></span>
-            <label for="token">Token</label>
-            <button type="button" id="toggleToken" class="toggle-password">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="eye-icon"
-              >
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="eye-off-icon"
-                style="display: none"
-              >
-                <path
-                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                ></path>
-                <line x1="1" y1="1" x2="23" y2="23"></line>
-              </svg>
-            </button>
+
+          <div class="settings-section">
+            <div class="toggle-group">
+              <span class="toggle-label">自动接管下载</span>
+              <label class="toggle">
+                <input type="checkbox" id="enabled" />
+                <span class="toggle-switch"></span>
+              </label>
+            </div>
+            <div class="toggle-group">
+              <span class="toggle-label">自定义下载选项 (Beta)</span>
+              <label class="toggle">
+                <input type="checkbox" id="customDownloadOptions" />
+                <span class="toggle-switch"></span>
+              </label>
+            </div>
           </div>
-          <div class="toggle-group">
-            <span class="toggle-label">自动接管</span>
-            <label class="toggle">
-              <input type="checkbox" id="enabled" />
-              <span class="toggle-switch"></span>
-            </label>
+
+          <div class="settings-section">
+            <div class="toggle-group">
+              <span class="toggle-label">小文件使用浏览器下载</span>
+              <label class="toggle">
+                <input type="checkbox" id="smallFileMode" />
+                <span class="toggle-switch"></span>
+              </label>
+            </div>
+            <div class="input-group size-input">
+              <input type="number" id="smallFileSize" required min="1" value="10" />
+              <span class="line"></span>
+              <label for="smallFileSize">文件大小阈值 (MB)</label>
+            </div>
           </div>
-          <div class="toggle-group">
-            <span class="toggle-label">自定义下载选项(Beta)</span>
-            <label class="toggle">
-              <input type="checkbox" id="customDownloadOptions" />
-              <span class="toggle-switch"></span>
-            </label>
-          </div>
+
           <button type="button" id="saveButton" class="save-button">
             <span class="button-text">保存</span>
             <span class="success-text">保存成功</span>
@@ -82,18 +103,21 @@
       <div id="blacklist" class="tab-content">
         <div class="blacklist-container">
           <div class="current-site">
-            <span>当前网站: <span id="currentSite"></span></span>
+            <span id="currentSite"></span>
             <button id="addToBlacklist" class="add-button">添加</button>
           </div>
 
-          <div class="manual-input">
-            <input
-              type="text"
-              id="manualBlacklistInput"
-              placeholder="手动输入网站域名..."
-            />
-            <button id="addManualBlacklist" class="add-button">添加</button>
+          <div class="blacklist-actions">
+            <div class="manual-input">
+              <input
+                type="text"
+                id="manualBlacklistInput"
+                placeholder="输入网站域名..."
+              />
+              <button id="addManualBlacklist" class="add-button">添加</button>
+            </div>
           </div>
+
           <div class="search-container">
             <input
               type="text"
@@ -101,6 +125,7 @@
               placeholder="搜索黑名单..."
             />
           </div>
+
           <ul id="blacklistItems"></ul>
           <div id="loadMore" class="load-more">加载更多</div>
         </div>
