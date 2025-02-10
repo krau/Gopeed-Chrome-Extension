@@ -6,9 +6,13 @@ const Settings = {
   token: "qwqowo",
   enabled: true,
   customDownloadOptions: false,
+  smallFileMode: false,
+  smallFileSize: 10,
 };
 
 let client;
+
+const smallFileDownloads = new Set();
 
 const initSettings = async () => {
   const items = await chrome.storage.local.get([
@@ -17,6 +21,8 @@ const initSettings = async () => {
     "enabled",
     "customDownloadOptions",
     "blacklist",
+    "smallFileMode",
+    "smallFileSize",
   ]);
   Object.assign(Settings, items);
   client = new Client({
@@ -49,13 +55,43 @@ async function isUrlInBlacklist(url) {
 
 async function handleDownload(downloadUrl, sourceUrl, filename, fileSize) {
   try {
+    const isSmallFile = Settings.smallFileMode && fileSize && fileSize <= Settings.smallFileSize * 1024 * 1024;
+    
+    if (isSmallFile) {
+      console.log(`Small file detected (${fileSize} bytes), using browser download`);
+      
+      smallFileDownloads.add(downloadUrl);
+      
+      chrome.downloads.download({
+        url: downloadUrl,
+        filename: filename,
+        saveAs: false
+      });
+      
+      setTimeout(() => {
+        smallFileDownloads.delete(downloadUrl);
+      }, 5000);
+      
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (tabs.length > 0) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          action: "showNotification",
+          message: `使用浏览器下载小文件: ${filename}, 文件大小: ${(fileSize / (1024 * 1024)).toFixed(2)}MB`,
+          color: INFOCOLOR
+        });
+      }
+      return;
+    }
+
     let customOptions = {
       url: downloadUrl,
       name: filename,
       connections: 1,
     };
 
-    if (Settings.customDownloadOptions) {
+    const isSmallFileMode = Settings.smallFileMode && fileSize && fileSize <= Settings.smallFileSize * 1024 * 1024;
+    
+    if (Settings.customDownloadOptions && !isSmallFileMode) {
       const tabs = await chrome.tabs.query({
         active: true,
         currentWindow: true,
@@ -92,7 +128,7 @@ async function handleDownload(downloadUrl, sourceUrl, filename, fileSize) {
           opt: {
             name: customOptions.name,
             extra: {
-              connections: customOptions.connections,
+              connections: isSmallFileMode ? 1 : customOptions.connections,
             },
           },
         });
@@ -108,10 +144,10 @@ async function handleDownload(downloadUrl, sourceUrl, filename, fileSize) {
     if (tabs.length > 0) {
       chrome.tabs.sendMessage(tabs[0].id, {
         action: "showNotification",
-        message: `正在下载: ${customOptions.name}, 文件大小: ${(
+        message: `${customOptions.name}, 文件大小: ${(
           fileSize /
           (1024 * 1024)
-        ).toFixed(2)}MB`,
+        ).toFixed(2)}MB${isSmallFileMode ? " (小文件单线程下载)" : ""}`,
       });
     }
   } catch (error) {
@@ -139,6 +175,11 @@ chrome.downloads.onCreated.addListener((item) => {
     console.log(
       `Download URL ${downloadUrl} starts with blob: or data:, not intercepting.`
     );
+    return;
+  }
+
+  if (smallFileDownloads.has(downloadUrl)) {
+    console.log(`Small file download detected for ${downloadUrl}, skipping interception`);
     return;
   }
 
