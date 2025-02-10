@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const customDownloadOptionsCheckbox = document.getElementById(
     "customDownloadOptions"
   );
+  const smallFileModeCheckbox = document.getElementById("smallFileMode");
+  const smallFileSizeInput = document.getElementById("smallFileSize");
   const tabButtons = document.querySelectorAll(".tab-button");
   const tabContents = document.querySelectorAll(".tab-content");
   const currentSiteSpan = document.getElementById("currentSite");
@@ -25,13 +27,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const itemsPerPage = 10;
 
   chrome.storage.local.get(
-    ["host", "token", "enabled", "customDownloadOptions", "blacklist"],
+    ["host", "token", "enabled", "customDownloadOptions", "blacklist", "smallFileMode", "smallFileSize"],
     function (result) {
       hostInput.value = result.host || DEFAULT_HOST;
       tokenInput.value = result.token || "";
       enabledCheckbox.checked = result.enabled !== false;
-      customDownloadOptionsCheckbox.checked =
-        result.customDownloadOptions || false;
+      customDownloadOptionsCheckbox.checked = result.customDownloadOptions || false;
+      smallFileModeCheckbox.checked = result.smallFileMode || false;
+      smallFileSizeInput.value = result.smallFileSize || 10;
       blacklist = result.blacklist || {};
       displayBlacklistItems();
       updateCurrentSiteButton();
@@ -70,6 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const token = tokenInput.value;
     const enabled = enabledCheckbox.checked;
     const customDownloadOptions = customDownloadOptionsCheckbox.checked;
+    const smallFileMode = smallFileModeCheckbox.checked;
+    const smallFileSize = parseInt(smallFileSizeInput.value) || 10;
 
     if (!isValidUrl(host)) {
       showError(hostInput, "无效的 URL 格式");
@@ -82,10 +87,23 @@ document.addEventListener("DOMContentLoaded", function () {
         token: token,
         enabled: enabled,
         customDownloadOptions: customDownloadOptions,
+        smallFileMode: smallFileMode,
+        smallFileSize: smallFileSize,
       },
       function () {
         saveButton.classList.add("success");
         setTimeout(() => saveButton.classList.remove("success"), 1500);
+        chrome.runtime.sendMessage({
+          action: "updateSettings",
+          settings: {
+            host: host,
+            token: token,
+            enabled: enabled,
+            customDownloadOptions: customDownloadOptions,
+            smallFileMode: smallFileMode,
+            smallFileSize: smallFileSize,
+          }
+        });
       }
     );
   });
@@ -186,13 +204,30 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < itemsToShow; i++) {
       const item = filteredBlacklist[displayedItems + i];
       const li = document.createElement("li");
-      li.textContent = item;
+      
+      const domain = document.createElement("span");
+      domain.className = "domain";
+      domain.textContent = item;
+      li.appendChild(domain);
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+      
       const removeButton = document.createElement("button");
+      removeButton.className = "delete-button";
       removeButton.textContent = "删除";
-      removeButton.addEventListener("click", function () {
-        toggleBlacklistItem(item);
+      removeButton.addEventListener("click", function (e) {
+        e.stopPropagation();
+        li.style.transform = "translateX(100%)";
+        li.style.opacity = "0";
+        setTimeout(() => {
+          toggleBlacklistItem(item);
+        }, 300);
       });
-      li.appendChild(removeButton);
+      
+      actions.appendChild(removeButton);
+      li.appendChild(actions);
+
       if (!isSearch) {
         li.style.animation = "none";
         li.offsetHeight;
@@ -249,5 +284,22 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentNode.classList.remove("focus");
       }
     });
+  });
+
+  manualBlacklistInput.addEventListener("input", function() {
+    const value = this.value.trim();
+    if (value && !isValidDomain(value)) {
+      this.classList.add("invalid");
+    } else {
+      this.classList.remove("invalid");
+    }
+  });
+
+  let searchTimeout;
+  searchBlacklist.addEventListener("input", function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      displayBlacklistItems(false, true);
+    }, 300);
   });
 });
